@@ -8,8 +8,13 @@ namespace WarehouseOperations.Domain
 {
     public class Product
     {
-        int ProductId { get; set; }
-        public string Name { get; set; }
-        public Guid Barcode { get; set; }
+        public int ProductId { get { return _ProductId; } }
+        private int _ProductId { get; set; }
+
+        public string Name { get { return _Name; } }
+        private string _Name { get; set; }
+
+        public Guid Barcode { get { return _Barcode; } }
+        private Guid _Barcode { get; set; }
     }
 }
