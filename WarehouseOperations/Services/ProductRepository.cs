@@ -57,7 +57,7 @@ namespace WarehouseOperations.Services
 
         public List<Product> GetProductList()
         {
-            throw new NotImplementedException();
+            return products.ToList();
         }
 
         public bool CheckProductName(string productName)
