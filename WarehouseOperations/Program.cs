@@ -1,4 +1,5 @@
-﻿using WarehouseOperations.Domain;
+﻿using System.Text.RegularExpressions;
+using WarehouseOperations.Domain;
 using WarehouseOperations.Interface;
 using WarehouseOperations.Services;
 
@@ -8,9 +9,9 @@ namespace WarehouseOperations
     {
         static void Main(string[] args)
         {
-            IProductRepository productRepository = new ProductRepository();
-            Product product = new Product(1, "Aaaaa_123",Guid.NewGuid());
-            productRepository.AddProduct(product);
+            
+
+
         }
     }
 }

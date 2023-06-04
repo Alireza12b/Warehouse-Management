@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WarehouseOperations.Domain;
 using WarehouseOperations.Interface;
-using WarehouseOperations.Util;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace WarehouseOperations.Services
@@ -30,7 +29,7 @@ namespace WarehouseOperations.Services
         {
             int newProductId = products.Count > 0 ? products.Max(u => u.ProductId) + 1 : 1;
 
-            if (CheckProductName(product.Name) == false)
+            if (CheckProductName(product.Name) == true)
             {
                 var newProduct = new Product(1, product.Name, product.Barcode);
                 products.Add(newProduct);
@@ -45,7 +44,15 @@ namespace WarehouseOperations.Services
 
         public string GetProductById(int id)
         {
-            throw new NotImplementedException();
+            var productById = products.FirstOrDefault(product => product.ProductId == id);
+            if (productById != null)
+            {
+                return "ID = " + productById.ProductId + " | " + "Name = " + productById.Name + " | " + "Barcode = " + productById.Barcode;
+            }
+            else
+            {
+                return "Entered Id not found";
+            }
         }
 
         public List<Product> GetProductList()
@@ -55,7 +62,7 @@ namespace WarehouseOperations.Services
 
         public bool CheckProductName(string productName)
         {
-            string nameCheck = "^[a-z]{1}[a-z_]{3}[0-9]{3}$";
+            string nameCheck = @"^[A-Z][a-z]{3}[A-z a-z]_[0-9]{3}$";
             bool isValid = Regex.IsMatch(productName, nameCheck);
             return isValid;
         }
