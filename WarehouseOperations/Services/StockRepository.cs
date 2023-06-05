@@ -15,6 +15,7 @@ namespace WarehouseOperations.Services
         private List<Stock> stocks;
         private string productRelativePath;
         private string stockRelativePath;
+        private string productListPath;
         IProductRepository productRepository = new ProductRepository();
 
         public StockRepository()
@@ -23,6 +24,7 @@ namespace WarehouseOperations.Services
             string dataBaseFolderPath = Path.Combine(Directorypath, "DataBase");
             productRelativePath = Path.Combine(dataBaseFolderPath, "ProductJson.json");
             stockRelativePath = Path.Combine(dataBaseFolderPath, "StockJson.json");
+            productListPath = Path.Combine(dataBaseFolderPath, "GetSalesProductList.txt");
 
             products = ProductJsonRead();
             stocks = StockJsonRead();
@@ -71,7 +73,14 @@ namespace WarehouseOperations.Services
 
         public List<Stock> GetSalesProductList()
         {
-            throw new NotImplementedException();
+            using (StreamWriter streamWriter = new StreamWriter(productListPath))
+            {
+                foreach (var stock in stocks)
+                {
+                    streamWriter.WriteLine(stock.ToString());
+                }
+            }
+            return stocks.ToList();
         }
 
         public string SaleProduct(int productId, int cnt)
