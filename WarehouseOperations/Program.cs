@@ -9,8 +9,6 @@ namespace WarehouseOperations
     {
         static void Main(string[] args)
         {
-            
-
 
         }
     }
