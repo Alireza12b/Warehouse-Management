@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace WarehouseOperations.Services
         private string productRelativePath;
         private string stockRelativePath;
         private string productListPath;
+        private string logRelativePath;
         IProductRepository productRepository = new ProductRepository();
 
         public StockRepository()
@@ -25,6 +27,7 @@ namespace WarehouseOperations.Services
             productRelativePath = Path.Combine(dataBaseFolderPath, "ProductJson.json");
             stockRelativePath = Path.Combine(dataBaseFolderPath, "StockJson.json");
             productListPath = Path.Combine(dataBaseFolderPath, "GetSalesProductList.txt");
+            logRelativePath = Path.Combine(dataBaseFolderPath, "Log.txt");
 
             products = ProductJsonRead();
             stocks = StockJsonRead();
@@ -41,6 +44,7 @@ namespace WarehouseOperations.Services
                 existingProduct.ProductPrice = newQuantity;
 
                 StockJsonWrite(stocks);
+                Logger($"(Buy) | ID: {productInStock.ProductId} | Name: {productInStock.Name} | Quantity: {productInStock.ProductQuantity} | Price: {productInStock.ProductPrice}");
                 return "Product quantity and price updated successfully.";
             }
             else
@@ -67,6 +71,7 @@ namespace WarehouseOperations.Services
                 ProductJsonWrite(products);
                 StockJsonWrite(stocks);
 
+                Logger($"(Add and Buy) | ID: {productInStock.ProductId} | Name: {productInStock.Name} | Quantity: {productInStock.ProductQuantity} | Price: {productInStock.ProductPrice}");
                 return productRepository.GetProductById(newProductId) + "\n added to DB";
             }
         }
@@ -93,6 +98,7 @@ namespace WarehouseOperations.Services
                 if (GetProductQuantity(productId) >= cnt)
                 {
                     validProduct.ProductQuantity -= cnt;
+                    Logger($"(Sell) | ID: {productId} | Name: {validProduct.Name} | Quantity: {cnt}");
                     return validProduct.Name + "sold and quantity decreased";
                 }
                 else
@@ -110,6 +116,14 @@ namespace WarehouseOperations.Services
         {
             var product = stocks.FirstOrDefault(s => s.ProductId == productId);
             return product.ProductQuantity;
+        }
+
+        private void Logger(string message)
+        {
+            using (StreamWriter writer = new StreamWriter(logRelativePath, true))
+            {
+                writer.WriteLine($"Time = [{DateTime.Now}] {message}");
+            }
         }
 
 
