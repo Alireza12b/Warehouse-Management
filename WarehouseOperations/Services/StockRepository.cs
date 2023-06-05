@@ -15,6 +15,7 @@ namespace WarehouseOperations.Services
         private List<Stock> stocks;
         private string productRelativePath;
         private string stockRelativePath;
+        IProductRepository productRepository = new ProductRepository();
 
         public StockRepository()
         {
@@ -32,13 +33,39 @@ namespace WarehouseOperations.Services
             var existingProduct = stocks.FirstOrDefault(product => product.ProductId == productInStock.ProductId);
             if (existingProduct != null)
             {
-                existingProduct.ProductQuantity += productInStock.ProductQuantity;
+                var newQuantity = existingProduct.ProductQuantity + productInStock.ProductQuantity;
+                var newPrice = ((existingProduct.ProductPrice * existingProduct.ProductQuantity) + (productInStock.ProductPrice * productInStock.ProductQuantity)) / newQuantity;
+                existingProduct.ProductQuantity = newPrice;
+                existingProduct.ProductPrice = newQuantity;
+
                 StockJsonWrite(stocks);
-                return "Product quantity updated successfully.";
+                return "Product quantity and price updated successfully.";
             }
             else
             {
-                return "Product quantity updated successfully.";
+                int newProductId = products.Count > 0 ? products.Max(u => u.ProductId) + 1 : 1;
+                var newProduct = new Product()
+                {
+                    ProductId = newProductId,
+                    Name = productInStock.Name,
+                    Barcode = Guid.NewGuid(),
+                };
+                var newStock = new Stock()
+                {
+                    StockId = Guid.NewGuid(),
+                    Name = productInStock.Name,
+                    ProductId = newProductId,
+                    ProductQuantity = productInStock.ProductQuantity,
+                    ProductPrice = productInStock.ProductPrice
+                };
+
+                products.Add(newProduct);
+                stocks.Add(newStock);
+
+                ProductJsonWrite(products);
+                StockJsonWrite(stocks);
+
+                return productRepository.GetProductById(newProductId);
             }
         }
 
