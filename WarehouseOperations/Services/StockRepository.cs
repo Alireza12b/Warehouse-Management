@@ -65,7 +65,7 @@ namespace WarehouseOperations.Services
                 ProductJsonWrite(products);
                 StockJsonWrite(stocks);
 
-                return productRepository.GetProductById(newProductId);
+                return productRepository.GetProductById(newProductId) + "\n added to DB";
             }
         }
 
@@ -76,8 +76,33 @@ namespace WarehouseOperations.Services
 
         public string SaleProduct(int productId, int cnt)
         {
-            throw new NotImplementedException();
+            var validProduct = (from product in stocks
+                                where product.ProductId == productId && product.ProductQuantity != 0
+                                select product).FirstOrDefault();
+            if (validProduct != null)
+            {
+                if (GetProductQuantity(productId) >= cnt)
+                {
+                    validProduct.ProductQuantity -= cnt;
+                    return validProduct.Name + "sold and quantity decreased";
+                }
+                else
+                {
+                    return productRepository.GetProductById(productId) + "\n Product quantity is lower than your request";
+                }
+            }
+            else
+            {
+                return "Product not found or out of stock";
+            }
         }
+
+        int GetProductQuantity(int productId)
+        {
+            var product = stocks.FirstOrDefault(s => s.ProductId == productId);
+            return product.ProductQuantity;
+        }
+
 
         private List<Product> ProductJsonRead()
         {
