@@ -56,7 +56,7 @@ namespace WarehouseOperations.Services
                 ProductJsonWrite(products);
                 StockJsonWrite(stocks);
 
-                return "Product added to DB";
+                return $"Product {product.Name} added to DB";
             }
             else
             {
