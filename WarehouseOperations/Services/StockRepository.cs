@@ -40,8 +40,8 @@ namespace WarehouseOperations.Services
             {
                 var newQuantity = existingProduct.ProductQuantity + productInStock.ProductQuantity;
                 var newPrice = ((existingProduct.ProductPrice * existingProduct.ProductQuantity) + (productInStock.ProductPrice * productInStock.ProductQuantity)) / newQuantity;
-                existingProduct.ProductQuantity = newPrice;
-                existingProduct.ProductPrice = newQuantity;
+                existingProduct.ProductQuantity = newQuantity;
+                existingProduct.ProductPrice = newPrice;
 
                 StockJsonWrite(stocks);
                 Logger($"(Buy) | ID: {productInStock.ProductId} | Name: {productInStock.Name} | Quantity: {productInStock.ProductQuantity} | Price: {productInStock.ProductPrice}");
@@ -71,8 +71,8 @@ namespace WarehouseOperations.Services
                 ProductJsonWrite(products);
                 StockJsonWrite(stocks);
 
-                Logger($"(Add and Buy) | ID: {productInStock.ProductId} | Name: {productInStock.Name} | Quantity: {productInStock.ProductQuantity} | Price: {productInStock.ProductPrice}");
-                return productRepository.GetProductById(newProductId) + "\n added to DB";
+                Logger($"(Add and Buy) | ID: {newProductId} | Name: {productInStock.Name} | Quantity: {productInStock.ProductQuantity} | Price: {productInStock.ProductPrice}");
+                return productRepository.GetProductById(newProductId) + "\nadded to DB and bought";
             }
         }
 
@@ -99,11 +99,11 @@ namespace WarehouseOperations.Services
                 {
                     validProduct.ProductQuantity -= cnt;
                     Logger($"(Sell) | ID: {productId} | Name: {validProduct.Name} | Quantity: {cnt}");
-                    return validProduct.Name + "sold and quantity decreased";
+                    return validProduct.Name + " sold and quantity decreased";
                 }
                 else
                 {
-                    return productRepository.GetProductById(productId) + "\n Product quantity is lower than your request";
+                    return productRepository.GetProductById(productId) + "\nProduct quantity is lower than your request";
                 }
             }
             else

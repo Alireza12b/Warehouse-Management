@@ -1,1 +1,2 @@
-﻿
+WarehouseOperations.Domain.Stock
+WarehouseOperations.Domain.Stock

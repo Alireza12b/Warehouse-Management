@@ -13,7 +13,9 @@ namespace WarehouseOperations
     public class Menu
     {
         IProductRepository productRepository = new ProductRepository();
+        IStockRepository stockRepository = new StockRepository();
         Product product;
+        Stock stock;
 
         public void MainMenu()
         {
@@ -175,6 +177,195 @@ namespace WarehouseOperations
         public void StockMenu()
         {
             Console.Clear();
+            Console.Clear();
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("                                                 Stock Management                                                   ");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("\nSelect what do you want to do ?\n" +
+                "1- Buy Product\n" +
+                "2- Sale Product\n" +
+                "3- Get Stock List\n" +
+                "0- Back to MainMenu\n");
+
+            bool validStockMenuSelection = int.TryParse(Console.ReadLine(), out int StockMenuSelection);
+            if (validStockMenuSelection)
+            {
+
+                if (StockMenuSelection == 1)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Please enter product ID or Enter a name to buy and add\n" +
+                       "0- Back to Menu\n");
+                    var productList = productRepository.GetProductList();
+                    foreach (var item in productList)
+                    {
+                        Console.WriteLine($"ID = {item.ProductId} | Name = {item.Name} | Barcode = {item.Barcode}");
+                    }
+                    string input = Console.ReadLine();
+                    bool validId = int.TryParse(input, out int id);
+                    if (validId)
+                    {
+                        if (id == 0)
+                        {
+                            Console.Clear() ;
+                            StockMenu();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter quantity that you want to buy");
+                            bool validQuantity = int.TryParse(Console.ReadLine(),out int quantity);
+                            if (validQuantity)
+                            {
+                                Console.WriteLine("Please enter the price of 1 item of the product");
+                                bool validprice = int.TryParse(Console.ReadLine(), out int price);
+                                if (validprice)
+                                {
+                                    stock = new Stock()
+                                    {
+                                        ProductId = id,
+                                        ProductQuantity = quantity,
+                                        ProductPrice = price
+                                    };
+                                    Console.WriteLine(stockRepository.BuyProduct(stock));
+                                    Console.WriteLine("\nPlease press any key");
+                                    Console.ReadKey();
+                                    Console.Clear();
+                                    StockMenu();
+                                }
+                                else
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("Please enter correct price");
+                                    StockMenu();
+                                }
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Please enter correct quantity");
+                                StockMenu();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter quantity that you want to buy");
+                        bool validQuantity = int.TryParse(Console.ReadLine(), out int quantity);
+                        if (validQuantity)
+                        {
+                            Console.WriteLine("Please enter the price of 1 item of the product");
+                            bool validprice = int.TryParse(Console.ReadLine(), out int price);
+                            if (validprice)
+                            {
+                                stock = new Stock()
+                                {
+                                    Name = input,
+                                    ProductId = -1,
+                                    ProductQuantity = quantity,
+                                    ProductPrice = price
+                                };
+                                Console.WriteLine(stockRepository.BuyProduct(stock));
+                                Console.WriteLine("\nPlease press any key");
+                                Console.ReadKey();
+                                Console.Clear();
+                                StockMenu();
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Please enter correct price");
+                                StockMenu();
+                            }
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Please enter correct quantity");
+                            StockMenu();
+                        }
+                    }
+                }
+
+                else if(StockMenuSelection == 2)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Please enter product ID or Enter a name to buy and add\n" +
+                      "0- Back to Menu\n");
+                    var productList = productRepository.GetProductList();
+                    foreach (var item in productList)
+                    {
+                        Console.WriteLine($"ID = {item.ProductId} | Name = {item.Name} | Barcode = {item.Barcode}");
+                    }
+
+                    bool validId = int.TryParse(Console.ReadLine(), out int id);
+                    if (validId)
+                    {
+                        Console.WriteLine("Enter quantity that you want to sell");
+                        bool validQuantity = int.TryParse(Console.ReadLine(), out int quantity);
+                        if (validQuantity)
+                        {
+                            Console.WriteLine(stockRepository.SaleProduct(id,quantity));
+                            Console.WriteLine("\nPlease press any key");
+                            Console.ReadKey();
+                            Console.Clear();
+                            StockMenu();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Please enter correct form of Quantity");
+                            StockMenu();
+                        }
+                    }
+                    else if (id == 0)
+                    {
+                        Console.Clear();
+                        StockMenu();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Please enter correct form of ID");
+                        StockMenu();
+                    }
+                }
+
+                else if (StockMenuSelection == 3)
+                {
+                    Console.Clear();
+                    var stocks = stockRepository.GetSalesProductList();
+                    foreach(var item in stocks)
+                    {
+                        Console.WriteLine($"ID = {item.ProductId} | Name = {item.Name} | Quantity = {item.ProductQuantity} | Price = {item.ProductPrice} | StokID {item.StockId}");
+                    }
+                    Console.WriteLine("\nPlease press any key");
+                    Console.ReadKey();
+                    Console.Clear();
+                    StockMenu();
+                }
+
+                else if (StockMenuSelection == 0)
+                {
+                    Console.Clear();
+                    MainMenu();
+                }
+
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Please enter valid menu item");
+                    StockMenu();
+                }
+
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Please enter valid menu item");
+                StockMenu();
+            }
         }
     }
 }

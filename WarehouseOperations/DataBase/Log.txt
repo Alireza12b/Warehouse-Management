@@ -1,1 +1,8 @@
-﻿
+﻿Time = [6/7/2023 11:21:07 AM] (Buy) | ID: 1 | Name:  | Quantity: 3 | Price: 3000
+Time = [6/7/2023 11:23:39 AM] (Buy) | ID: 1 | Name:  | Quantity: 3 | Price: 4000
+Time = [6/7/2023 11:24:28 AM] (Add and Buy) | ID: -1 | Name: newbuyproduct | Quantity: 7 | Price: 8000
+Time = [6/7/2023 11:27:16 AM] (Buy) | ID: 0 | Name: newStock | Quantity: 2 | Price: 1000
+Time = [6/7/2023 11:32:41 AM] (Add and Buy) | ID: -1 | Name: ddwed | Quantity: 1 | Price: 1
+Time = [6/7/2023 11:41:06 AM] (Add and Buy) | ID: -1 | Name: wadawd | Quantity: 1 | Price: 1
+Time = [6/7/2023 11:51:07 AM] (Add and Buy) | ID: -1 | Name: jfdgdfgk | Quantity: 1 | Price: 1
+Time = [6/7/2023 12:04:17 PM] (Sell) | ID: 1 | Name: Bbbbb_333 | Quantity: 1
